@@ -14,7 +14,7 @@ var Client *mongo.Client
 var DB *mongo.Database
 
 func Connect(uri, dbName string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	clientOptions := options.Client().ApplyURI(uri)
