@@ -56,6 +56,10 @@ func Orders() *mongo.Collection {
 	return DB.Collection("orders")
 }
 
+func Images() *mongo.Collection {
+	return DB.Collection("images")
+}
+
 // EnsureIndexes creates required indexes for the 3D store collections
 func EnsureIndexes() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -122,6 +126,14 @@ func EnsureIndexes() error {
 	// orders: compound index on status + created_at
 	_, err = Orders().Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys: bson.D{{Key: "status", Value: 1}, {Key: "created_at", Value: -1}},
+	})
+	if err != nil {
+		return err
+	}
+
+	// images: compound index on group_id + size_label
+	_, err = Images().Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.D{{Key: "group_id", Value: 1}, {Key: "size_label", Value: 1}},
 	})
 	if err != nil {
 		return err

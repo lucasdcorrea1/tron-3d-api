@@ -29,6 +29,10 @@ func New() http.Handler {
 	// Categories (public)
 	mux.HandleFunc("GET /api/v1/categories", handlers.ListCategories)
 
+	// Images (public)
+	mux.HandleFunc("GET /api/v1/images/group/{groupId}", handlers.ServeImageByGroup)
+	mux.HandleFunc("GET /api/v1/images/{id}", handlers.ServeImage)
+
 	// ==========================================
 	// AUTH REQUIRED ROUTES
 	// ==========================================
@@ -56,6 +60,10 @@ func New() http.Handler {
 	mux.Handle("POST /api/v1/admin/categories", adminRoute(handlers.AdminCreateCategory))
 	mux.Handle("PUT /api/v1/admin/categories/{id}", adminRoute(handlers.AdminUpdateCategory))
 	mux.Handle("DELETE /api/v1/admin/categories/{id}", adminRoute(handlers.AdminDeleteCategory))
+
+	// Admin Images
+	mux.Handle("POST /api/v1/admin/upload", adminRoute(handlers.UploadImage))
+	mux.Handle("DELETE /api/v1/admin/images/{groupId}", adminRoute(handlers.DeleteImageGroup))
 
 	// Admin Orders
 	mux.Handle("GET /api/v1/admin/orders", adminRoute(handlers.AdminListOrders))
